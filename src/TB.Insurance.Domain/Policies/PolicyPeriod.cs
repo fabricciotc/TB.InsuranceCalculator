@@ -11,9 +11,7 @@ public sealed record PolicyPeriod
     public PolicyPeriod(DateOnly startDate, DateOnly endDate)
     {
         if (endDate <= startDate)
-        {
             throw new DomainException("The policy end date must be later than the policy start date.");
-        }
 
         StartDate = startDate;
         EndDate = endDate;

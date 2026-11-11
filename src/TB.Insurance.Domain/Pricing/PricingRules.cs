@@ -22,9 +22,7 @@ public static class PricingRules
     public static decimal AgeRated(int age, PremiumRates rates)
     {
         if (age < 0 || age > rates.MaximumAge)
-        {
             throw new DomainException("The member age is outside the supported range.");
-        }
 
         var band = age / rates.AgeBandWidth;
 

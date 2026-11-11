@@ -78,9 +78,7 @@ public sealed class Employee : Entity
         var atIndex = value.IndexOf('@', StringComparison.Ordinal);
 
         if (atIndex <= 0 || atIndex == value.Length - 1)
-        {
             throw new DomainException("The email address is not valid.");
-        }
 
         Email = value;
     }
@@ -88,9 +86,7 @@ public sealed class Employee : Entity
     public void ChangeGender(Gender gender)
     {
         if (!Enum.IsDefined(gender))
-        {
             throw new DomainException("The gender is not valid.");
-        }
 
         Gender = gender;
     }
@@ -100,9 +96,7 @@ public sealed class Employee : Entity
         ArgumentNullException.ThrowIfNull(coverage);
 
         if (!coverage.Contains(memberAddedOn))
-        {
             throw new DomainException("The member addition date must fall inside the policy period.");
-        }
 
         PolicyStartDate = coverage.StartDate;
         PolicyEndDate = coverage.EndDate;
@@ -112,9 +106,7 @@ public sealed class Employee : Entity
     public void ChangeDateOfBirth(DateOnly dateOfBirth)
     {
         if (dateOfBirth >= MemberAddedOn)
-        {
             throw new DomainException("The date of birth must be earlier than the member addition date.");
-        }
 
         DateOfBirth = dateOfBirth;
     }
@@ -124,9 +116,7 @@ public sealed class Employee : Entity
         var age = date.Year - DateOfBirth.Year;
 
         if (date < DateOfBirth.AddYears(age))
-        {
             age--;
-        }
 
         return age;
     }
@@ -134,16 +124,12 @@ public sealed class Employee : Entity
     private static string Required(string value, string paramName, int maxLength)
     {
         if (string.IsNullOrWhiteSpace(value))
-        {
             throw new DomainException($"'{paramName}' is required.");
-        }
 
         var trimmed = value.Trim();
 
         if (trimmed.Length > maxLength)
-        {
             throw new DomainException($"'{paramName}' cannot exceed {maxLength} characters.");
-        }
 
         return trimmed;
     }

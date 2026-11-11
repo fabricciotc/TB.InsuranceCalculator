@@ -17,9 +17,7 @@ public static class ProratingRules
         ArgumentNullException.ThrowIfNull(coverage);
 
         if (!coverage.Contains(memberAddedOn))
-        {
             throw new DomainException("The member addition date must fall inside the policy period.");
-        }
 
         return method switch
         {
@@ -38,9 +36,7 @@ public static class ProratingRules
                      + coverage.EndDate.Month - memberAddedOn.Month;
 
         if (coverage.EndDate.Day >= memberAddedOn.Day)
-        {
             months++;
-        }
 
         return Math.Clamp(months, 1, MonthsInYear);
     }

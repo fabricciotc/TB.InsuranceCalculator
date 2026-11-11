@@ -19,9 +19,7 @@ public sealed class DomainExceptionHandler(ILogger<DomainExceptionHandler> logge
         };
 
         if (statusCode == 0)
-        {
             return false;
-        }
 
         logger.LogInformation(exception, "Request rejected with {StatusCode}", statusCode);
 
