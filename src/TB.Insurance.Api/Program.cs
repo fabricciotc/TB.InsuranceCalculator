@@ -1,9 +1,19 @@
+using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using TB.Insurance.Application.Employees;
+using TB.Insurance.Application.Premiums;
+using TB.Insurance.Domain.Employees;
+using TB.Insurance.Domain.Pricing;
+using TB.Insurance.Infrastructure.Conexion;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<TB.Insurance.Api.Middleware.DomainExceptionHandler>();
 
 builder.Services.AddOpenApi(options =>
 {
@@ -17,6 +27,14 @@ builder.Services.AddOpenApi(options =>
         return Task.CompletedTask;
     });
 });
+
+builder.Services.AddDbContext<InsuranceDbContext>(options =>
+    options.UseInMemoryDatabase("tb-insurance"));
+
+builder.Services.AddSingleton(TimeProvider.System);
+
+builder.Services.AddScoped<SaveEmployeeHandler>();
+builder.Services.AddScoped<GetPremiumHandler>();
 
 var app = builder.Build();
 
