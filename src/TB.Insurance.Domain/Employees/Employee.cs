@@ -8,15 +8,13 @@ namespace TB.Insurance.Domain.Employees;
 [Table("Employees")]
 public sealed class Employee : Entity
 {
-    public const int MaxNameLength = 100;
-    public const int MaxEmailLength = 256;
+    private const int MaxNameLength = 100;
+    private const int MaxEmailLength = 256;
 
     [Required]
-    [MaxLength(MaxNameLength)]
     public string FirstName { get; private set; } = string.Empty;
 
     [Required]
-    [MaxLength(MaxNameLength)]
     public string LastName { get; private set; } = string.Empty;
 
     [Required]
@@ -37,6 +35,7 @@ public sealed class Employee : Entity
 
     [Required]
     public DateOnly MemberAddedOn { get; private set; }
+
 
     [NotMapped]
     public string FullName => $"{FirstName} {LastName}".Trim();
