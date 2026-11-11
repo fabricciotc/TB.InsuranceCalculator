@@ -5,9 +5,8 @@ namespace TB.Insurance.Domain.Common;
 public abstract class Entity
 {
     [Key]
-    public Guid Id { get; protected set; }
+    public Guid Id { get; protected set; } = Guid.NewGuid();
 
-    protected Entity() => Id = Guid.NewGuid();
-
-    protected Entity(Guid id) => Id = id;
+    [Required]
+    public DateTimeOffset CreatedAt { get; protected set; } = DateTimeOffset.UtcNow;
 }
