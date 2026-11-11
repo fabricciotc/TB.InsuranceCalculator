@@ -34,8 +34,6 @@ builder.Services.AddDbContext<InsuranceDbContext>(options =>
 builder.Services.Configure<PremiumSettings>(
     builder.Configuration.GetSection(PremiumSettings.SectionName));
 
-builder.Services.AddSingleton(TimeProvider.System);
-
 builder.Services.AddScoped<SaveEmployeeHandler>();
 builder.Services.AddScoped<GetPremiumHandler>();
 

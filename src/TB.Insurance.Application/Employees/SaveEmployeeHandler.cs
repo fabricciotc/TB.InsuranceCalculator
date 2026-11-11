@@ -4,7 +4,7 @@ using TB.Insurance.Infrastructure;
 
 namespace TB.Insurance.Application.Employees;
 
-public sealed class SaveEmployeeHandler(InsuranceDbContext context, TimeProvider timeProvider)
+public sealed class SaveEmployeeHandler(InsuranceDbContext context)
 {
     public async Task<SaveEmployeeResponse> HandleAsync(
         SaveEmployeeRequest request,
@@ -21,8 +21,7 @@ public sealed class SaveEmployeeHandler(InsuranceDbContext context, TimeProvider
             request.Gender,
             request.Email,
             coverage,
-            request.MemberAddedOn,
-            timeProvider.GetUtcNow());
+            request.MemberAddedOn);
 
         await context.Employees.AddAsync(employee, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);

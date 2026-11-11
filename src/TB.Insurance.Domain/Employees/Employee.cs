@@ -38,9 +38,6 @@ public sealed class Employee : Entity
     [Required]
     public DateOnly MemberAddedOn { get; private set; }
 
-    [Required]
-    public DateTimeOffset CreatedAt { get; private set; }
-
     [NotMapped]
     public string FullName => $"{FirstName} {LastName}".Trim();
 
@@ -61,16 +58,13 @@ public sealed class Employee : Entity
         Gender gender,
         string email,
         PolicyPeriod coverage,
-        DateOnly memberAddedOn,
-        DateTimeOffset createdAt)
+        DateOnly memberAddedOn)
     {
         Rename(firstName, lastName);
         ChangeEmail(email);
         ChangeGender(gender);
         AssignCoverage(coverage, memberAddedOn);
         ChangeDateOfBirth(dateOfBirth);
-
-        CreatedAt = createdAt;
     }
 
     public void Rename(string firstName, string lastName)
