@@ -5,4 +5,7 @@
     <Project Path="src/TB.Insurance.Domain/TB.Insurance.Domain.csproj" />
     <Project Path="src/TB.Insurance.Infrastructure/TB.Insurance.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TB.Insurance.UnitTests/TB.Insurance.UnitTests.csproj" />
+  </Folder>
 </Solution>
