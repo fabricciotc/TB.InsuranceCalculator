@@ -1,0 +1,157 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using TB.Insurance.Domain.Common;
+using TB.Insurance.Domain.Policies;
+
+namespace TB.Insurance.Domain.Employees;
+
+[Table("Employees")]
+public sealed class Employee : Entity
+{
+    public const int MaxNameLength = 100;
+    public const int MaxEmailLength = 256;
+
+    [Required]
+    [MaxLength(MaxNameLength)]
+    public string FirstName { get; private set; } = string.Empty;
+
+    [Required]
+    [MaxLength(MaxNameLength)]
+    public string LastName { get; private set; } = string.Empty;
+
+    [Required]
+    public DateOnly DateOfBirth { get; private set; }
+
+    [Required]
+    public Gender Gender { get; private set; }
+
+    [Required]
+    [MaxLength(MaxEmailLength)]
+    public string Email { get; private set; } = string.Empty;
+
+    [Required]
+    public DateOnly PolicyStartDate { get; private set; }
+
+    [Required]
+    public DateOnly PolicyEndDate { get; private set; }
+
+    [Required]
+    public DateOnly MemberAddedOn { get; private set; }
+
+    [Required]
+    public DateTimeOffset CreatedAt { get; private set; }
+
+    [NotMapped]
+    public string FullName => $"{FirstName} {LastName}".Trim();
+
+    [NotMapped]
+    public PolicyPeriod Coverage => new(PolicyStartDate, PolicyEndDate);
+
+    [NotMapped]
+    public int AgeOnAddition => AgeAt(MemberAddedOn);
+
+    private Employee()
+    {
+    }
+
+    public Employee(
+        string firstName,
+        string lastName,
+        DateOnly dateOfBirth,
+        Gender gender,
+        string email,
+        PolicyPeriod coverage,
+        DateOnly memberAddedOn,
+        DateTimeOffset createdAt)
+    {
+        Rename(firstName, lastName);
+        ChangeEmail(email);
+        ChangeGender(gender);
+        AssignCoverage(coverage, memberAddedOn);
+        ChangeDateOfBirth(dateOfBirth);
+
+        CreatedAt = createdAt;
+    }
+
+    public void Rename(string firstName, string lastName)
+    {
+        FirstName = Required(firstName, nameof(firstName), MaxNameLength);
+        LastName = Required(lastName, nameof(lastName), MaxNameLength);
+    }
+
+    public void ChangeEmail(string email)
+    {
+        var value = Required(email, nameof(email), MaxEmailLength);
+        var atIndex = value.IndexOf('@', StringComparison.Ordinal);
+
+        if (atIndex <= 0 || atIndex == value.Length - 1)
+        {
+            throw new DomainException("The email address is not valid.");
+        }
+
+        Email = value;
+    }
+
+    public void ChangeGender(Gender gender)
+    {
+        if (!Enum.IsDefined(gender))
+        {
+            throw new DomainException("The gender is not valid.");
+        }
+
+        Gender = gender;
+    }
+
+    public void AssignCoverage(PolicyPeriod coverage, DateOnly memberAddedOn)
+    {
+        ArgumentNullException.ThrowIfNull(coverage);
+
+        if (!coverage.Contains(memberAddedOn))
+        {
+            throw new DomainException("The member addition date must fall inside the policy period.");
+        }
+
+        PolicyStartDate = coverage.StartDate;
+        PolicyEndDate = coverage.EndDate;
+        MemberAddedOn = memberAddedOn;
+    }
+
+    public void ChangeDateOfBirth(DateOnly dateOfBirth)
+    {
+        if (dateOfBirth >= MemberAddedOn)
+        {
+            throw new DomainException("The date of birth must be earlier than the member addition date.");
+        }
+
+        DateOfBirth = dateOfBirth;
+    }
+
+    public int AgeAt(DateOnly date)
+    {
+        var age = date.Year - DateOfBirth.Year;
+
+        if (date < DateOfBirth.AddYears(age))
+        {
+            age--;
+        }
+
+        return age;
+    }
+
+    private static string Required(string value, string paramName, int maxLength)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            throw new DomainException($"'{paramName}' is required.");
+        }
+
+        var trimmed = value.Trim();
+
+        if (trimmed.Length > maxLength)
+        {
+            throw new DomainException($"'{paramName}' cannot exceed {maxLength} characters.");
+        }
+
+        return trimmed;
+    }
+}
