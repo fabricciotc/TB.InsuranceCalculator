@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>TB.Insurance.Application</RootNamespace>
+    <AssemblyName>TB.Insurance.Application</AssemblyName>
+    <Description>Use cases, orchestration and application contracts.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TB.Insurance.Domain\TB.Insurance.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

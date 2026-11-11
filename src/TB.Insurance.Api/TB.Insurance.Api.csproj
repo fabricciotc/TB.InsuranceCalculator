@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>TB.Insurance.Api</RootNamespace>
+    <AssemblyName>TB.Insurance.Api</AssemblyName>
+    <Description>Public, unauthenticated HTTP API surface for the insurance premium calculator.</Description>
+    <UserSecretsId>a3f1c1e2-5a71-4c8e-9b6e-2f4f7d1c9b31</UserSecretsId>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.2" />
+    <PackageReference Include="Microsoft.OpenApi" Version="2.13.0" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.20.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TB.Insurance.Application\TB.Insurance.Application.csproj" />
+    <ProjectReference Include="..\TB.Insurance.Domain\TB.Insurance.Domain.csproj" />
+    <ProjectReference Include="..\TB.Insurance.Infrastructure\TB.Insurance.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

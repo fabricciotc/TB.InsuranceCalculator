@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>TB.Insurance.Domain</RootNamespace>
+    <AssemblyName>TB.Insurance.Domain</AssemblyName>
+    <Description>Domain model, invariants and business rules for the insurance premium calculator.</Description>
+  </PropertyGroup>
+
+</Project>

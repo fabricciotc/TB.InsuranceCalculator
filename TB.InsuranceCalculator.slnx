@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TB.Insurance.Api/TB.Insurance.Api.csproj" />
+    <Project Path="src/TB.Insurance.Application/TB.Insurance.Application.csproj" />
+    <Project Path="src/TB.Insurance.Domain/TB.Insurance.Domain.csproj" />
+    <Project Path="src/TB.Insurance.Infrastructure/TB.Insurance.Infrastructure.csproj" />
+  </Folder>
+</Solution>
