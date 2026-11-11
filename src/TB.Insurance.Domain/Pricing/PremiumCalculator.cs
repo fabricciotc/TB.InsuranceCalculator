@@ -7,11 +7,12 @@ public static class PremiumCalculator
     public static Premium Calculate(
         Employee employee,
         PricingModel pricingModel,
-        ProratingMethod proratingMethod)
+        ProratingMethod proratingMethod,
+        PremiumRates rates)
     {
         ArgumentNullException.ThrowIfNull(employee);
 
-        var fullPremium = PricingRules.FullPremium(employee, pricingModel);
+        var fullPremium = PricingRules.FullPremium(employee, pricingModel, rates);
         var proratedPremium = ProratingRules.Prorate(fullPremium, proratingMethod, employee.Coverage, employee.MemberAddedOn);
 
         return new Premium(

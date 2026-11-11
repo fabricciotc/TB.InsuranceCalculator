@@ -1,8 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using TB.Insurance.Domain.Employees;
-using TB.Insurance.Domain.Pricing;
 using TB.Insurance.Domain.Policies;
-using TB.Insurance.Infrastructure.Conexion;
+using TB.Insurance.Infrastructure;
 
 namespace TB.Insurance.Application.Employees;
 

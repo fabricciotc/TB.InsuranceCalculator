@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using TB.Insurance.Application.Configuration;
 using TB.Insurance.Domain.Common;
 using TB.Insurance.Domain.Pricing;
-using TB.Insurance.Infrastructure.Conexion;
+using TB.Insurance.Infrastructure;
 
 namespace TB.Insurance.Application.Premiums;
 
-public sealed class GetPremiumHandler(InsuranceDbContext context)
+public sealed class GetPremiumHandler(InsuranceDbContext context, IOptions<PremiumSettings> settings)
 {
     public async Task<GetPremiumResponse> HandleAsync(
         GetPremiumRequest request,
@@ -14,14 +16,16 @@ public sealed class GetPremiumHandler(InsuranceDbContext context)
         ArgumentNullException.ThrowIfNull(request);
 
         var employee = await context.Employees
-            .FirstOrDefaultAsync(employee => employee.Id == request.EmployeeId, cancellationToken)
+            .SingleOrDefaultAsync(employee => employee.Id == request.EmployeeId, cancellationToken)
             ?? throw new NotFoundException($"Employee '{request.EmployeeId}' was not found.");
 
-        var premium = PremiumCalculator.Calculate(employee, request.PricingModel, request.ProratingMethod);
+        var premium = PremiumCalculator.Calculate(
+            employee,
+            request.PricingModel,
+            request.ProratingMethod,
+            settings.Value.ToRates());
 
-        return new GetPremiumResponse(
-            premium.EmployeeId,
-            employee.FullName,
+        return new GetPremiumResponse(employee.FullName,
             employee.AgeOnAddition,
             premium.PricingModel,
             premium.ProratingMethod,

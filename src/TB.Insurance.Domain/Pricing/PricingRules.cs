@@ -5,43 +5,38 @@ namespace TB.Insurance.Domain.Pricing;
 
 public static class PricingRules
 {
-    public const decimal FlatAnnualPremium = 1_000m;
-    public const int AgeBandWidth = 10;
-    public const int MaximumAge = 120;
-    public const int FemaleLoadingAge = 18;
-    public const decimal FemaleLoadingFactor = 1.5m;
-
-    public static decimal FullPremium(Employee employee, PricingModel model)
+    public static decimal FullPremium(Employee employee, PricingModel model, PremiumRates rates)
     {
         ArgumentNullException.ThrowIfNull(employee);
+        ArgumentNullException.ThrowIfNull(rates);
 
         return model switch
         {
-            PricingModel.FlatRate => FlatAnnualPremium,
-            PricingModel.AgeRated => AgeRated(employee.AgeOnAddition),
-            PricingModel.GenderAgeRated => GenderAgeRated(employee.AgeOnAddition, employee.Gender),
+            PricingModel.FlatRate => rates.FlatAnnualPremium,
+            PricingModel.AgeRated => AgeRated(employee.AgeOnAddition, rates),
+            PricingModel.GenderAgeRated => GenderAgeRated(employee.AgeOnAddition, employee.Gender, rates),
             _ => throw new DomainException($"The pricing model '{model}' is not supported.")
         };
     }
 
-    public static decimal AgeRated(int age)
+    public static decimal AgeRated(int age, PremiumRates rates)
     {
-        if (age is < 0 or > MaximumAge)
+        if (age < 0 || age > rates.MaximumAge)
         {
             throw new DomainException("The member age is outside the supported range.");
         }
 
-        var band = age / AgeBandWidth;
+        var band = age / rates.AgeBandWidth;
 
-        return age * ((band + 1) * 100m);
+        return age * ((band + 1) * rates.AgeBandMultiplier);
     }
 
-    public static decimal GenderAgeRated(int age, Gender gender)
+    public static decimal GenderAgeRated(int age, Gender gender, PremiumRates rates)
     {
-        var premium = AgeRated(age);
+        var premium = AgeRated(age, rates);
 
-        return gender == Gender.Female && age >= FemaleLoadingAge
-            ? premium * FemaleLoadingFactor
+        return gender == Gender.Female && age >= rates.FemaleLoadingAge
+            ? premium * rates.FemaleLoadingFactor
             : premium;
     }
 }

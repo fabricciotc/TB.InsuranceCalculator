@@ -45,13 +45,17 @@ The API reference is served at `http://localhost:5299/scalar/v1`.
 
 ## Pricing models
 
-Full annual premium before prorating:
+Full annual premium before prorating. The rates are read from configuration, under the
+`PremiumRates` section of `appsettings.json`:
 
-- `FlatRate`: 1000 USD for every member.
-- `AgeRated`: age band multiplied by 100, e.g. ages 0-9 pay `age * 100`, 10-19 pay `age * 200`,
-  20-29 pay `age * 300`, and so on.
-- `GenderAgeRated`: same as `AgeRated` for males and for females under 18. Females aged 18 or
-  older are multiplied by 1.5.
+- `FlatRate`: a flat annual premium for every member (`FlatAnnualPremium`, 1000 USD).
+- `AgeRated`: age band multiplied by `AgeBandMultiplier` (100), e.g. ages 0-9 pay `age * 100`,
+  10-19 pay `age * 200`, 20-29 pay `age * 300`, and so on.
+- `GenderAgeRated`: same as `AgeRated` for males and for females under `FemaleLoadingAge` (18).
+  Females aged 18 or older are multiplied by `FemaleLoadingFactor` (1.5).
+
+Every rate can be overridden per environment, for example
+`PremiumRates__FlatAnnualPremium=2000`.
 
 ## Prorating methods
 

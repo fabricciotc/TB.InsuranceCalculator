@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TB.Insurance.Domain.Employees;
 
-namespace TB.Insurance.Infrastructure.Conexion;
+namespace TB.Insurance.Infrastructure;
 
 public sealed class InsuranceDbContext(DbContextOptions<InsuranceDbContext> options) : DbContext(options)
 {

@@ -8,7 +8,6 @@ public sealed record GetPremiumRequest(
     ProratingMethod ProratingMethod);
 
 public sealed record GetPremiumResponse(
-    Guid EmployeeId,
     string FullName,
     int Age,
     PricingModel PricingModel,

@@ -1,17 +1,17 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using TB.Insurance.Application.Configuration;
 using TB.Insurance.Application.Employees;
 using TB.Insurance.Application.Premiums;
-using TB.Insurance.Domain.Employees;
-using TB.Insurance.Domain.Pricing;
-using TB.Insurance.Infrastructure.Conexion;
+using TB.Insurance.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<TB.Insurance.Api.Middleware.DomainExceptionHandler>();
 
@@ -30,6 +30,9 @@ builder.Services.AddOpenApi(options =>
 
 builder.Services.AddDbContext<InsuranceDbContext>(options =>
     options.UseInMemoryDatabase("tb-insurance"));
+
+builder.Services.Configure<PremiumSettings>(
+    builder.Configuration.GetSection(PremiumSettings.SectionName));
 
 builder.Services.AddSingleton(TimeProvider.System);
 
@@ -56,5 +59,3 @@ app.MapGet("/", () => Results.Redirect("/scalar/v1"))
    .ExcludeFromDescription();
 
 app.Run();
-
-public partial class Program;
