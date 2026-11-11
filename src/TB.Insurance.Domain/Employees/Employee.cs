@@ -8,9 +8,6 @@ namespace TB.Insurance.Domain.Employees;
 [Table("Employees")]
 public sealed class Employee : Entity
 {
-    private const int MaxNameLength = 100;
-    private const int MaxEmailLength = 256;
-
     [Required]
     public string FirstName { get; private set; } = string.Empty;
 
@@ -24,7 +21,6 @@ public sealed class Employee : Entity
     public Gender Gender { get; private set; }
 
     [Required]
-    [MaxLength(MaxEmailLength)]
     public string Email { get; private set; } = string.Empty;
 
     [Required]
@@ -37,18 +33,12 @@ public sealed class Employee : Entity
     public DateOnly MemberAddedOn { get; private set; }
 
 
-    [NotMapped]
     public string FullName => $"{FirstName} {LastName}".Trim();
 
-    [NotMapped]
     public PolicyPeriod Coverage => new(PolicyStartDate, PolicyEndDate);
 
-    [NotMapped]
     public int AgeOnAddition => AgeAt(MemberAddedOn);
 
-    private Employee()
-    {
-    }
 
     public Employee(
         string firstName,
@@ -66,15 +56,15 @@ public sealed class Employee : Entity
         ChangeDateOfBirth(dateOfBirth);
     }
 
-    public void Rename(string firstName, string lastName)
+    private void Rename(string firstName, string lastName)
     {
-        FirstName = Required(firstName, nameof(firstName), MaxNameLength);
-        LastName = Required(lastName, nameof(lastName), MaxNameLength);
+        FirstName = Required(firstName, nameof(firstName));
+        LastName = Required(lastName, nameof(lastName));
     }
 
-    public void ChangeEmail(string email)
+    private void ChangeEmail(string email)
     {
-        var value = Required(email, nameof(email), MaxEmailLength);
+        var value = Required(email, nameof(email));
         var atIndex = value.IndexOf('@', StringComparison.Ordinal);
 
         if (atIndex <= 0 || atIndex == value.Length - 1)
@@ -83,7 +73,7 @@ public sealed class Employee : Entity
         Email = value;
     }
 
-    public void ChangeGender(Gender gender)
+    private void ChangeGender(Gender gender)
     {
         if (!Enum.IsDefined(gender))
             throw new DomainException("The gender is not valid.");
@@ -91,7 +81,7 @@ public sealed class Employee : Entity
         Gender = gender;
     }
 
-    public void AssignCoverage(PolicyPeriod coverage, DateOnly memberAddedOn)
+    private void AssignCoverage(PolicyPeriod coverage, DateOnly memberAddedOn)
     {
         ArgumentNullException.ThrowIfNull(coverage);
 
@@ -103,7 +93,7 @@ public sealed class Employee : Entity
         MemberAddedOn = memberAddedOn;
     }
 
-    public void ChangeDateOfBirth(DateOnly dateOfBirth)
+    private void ChangeDateOfBirth(DateOnly dateOfBirth)
     {
         if (dateOfBirth >= MemberAddedOn)
             throw new DomainException("The date of birth must be earlier than the member addition date.");
@@ -111,7 +101,7 @@ public sealed class Employee : Entity
         DateOfBirth = dateOfBirth;
     }
 
-    public int AgeAt(DateOnly date)
+    private int AgeAt(DateOnly date)
     {
         var age = date.Year - DateOfBirth.Year;
 
@@ -121,15 +111,12 @@ public sealed class Employee : Entity
         return age;
     }
 
-    private static string Required(string value, string paramName, int maxLength)
+    private static string Required(string value, string paramName)
     {
         if (string.IsNullOrWhiteSpace(value))
             throw new DomainException($"'{paramName}' is required.");
 
         var trimmed = value.Trim();
-
-        if (trimmed.Length > maxLength)
-            throw new DomainException($"'{paramName}' cannot exceed {maxLength} characters.");
 
         return trimmed;
     }
