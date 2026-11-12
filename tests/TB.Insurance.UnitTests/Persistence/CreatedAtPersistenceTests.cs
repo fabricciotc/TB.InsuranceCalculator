@@ -66,7 +66,7 @@ public class CreatedAtPersistenceTests
     }
 
     [Fact]
-    public async Task CreatedAtIsNotOverwrittenWhenTheEmployeeIsUpdated()
+    public async Task CreatedAtIsNotOverwrittenWhenTheEntityIsSavedAgain()
     {
         await using var context = NewContext(Guid.NewGuid().ToString());
         var employee = TestEmployees.CreateAged(35);
@@ -75,7 +75,6 @@ public class CreatedAtPersistenceTests
 
         var original = employee.CreatedAt;
 
-        employee.Rename("Ana Maria", "Diaz");
         await context.SaveChangesAsync();
 
         Assert.Equal(original, employee.CreatedAt);

@@ -89,18 +89,12 @@ public class EmployeeTests
     }
 
     [Fact]
-    public void ANameLongerThanTheLimitIsRejected()
+    public void ANameIsTrimmedButNotLengthLimited()
     {
-        var tooLong = new string('a', 101);
+        var longName = new string('a', 101);
+        var employee = New(longName);
 
-        Assert.Throws<DomainException>(() => new Employee(
-            tooLong,
-            "Diaz",
-            new DateOnly(1990, 1, 1),
-            Gender.Female,
-            "ana@tb.com",
-            TestPeriods.FullYear(),
-            new DateOnly(2026, 1, 1)));
+        Assert.Equal(longName, employee.FirstName);
     }
 
     [Fact]

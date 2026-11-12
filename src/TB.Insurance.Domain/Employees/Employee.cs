@@ -33,12 +33,18 @@ public sealed class Employee : Entity
     public DateOnly MemberAddedOn { get; private set; }
 
 
+    [NotMapped]
     public string FullName => $"{FirstName} {LastName}".Trim();
 
+    [NotMapped]
     public PolicyPeriod Coverage => new(PolicyStartDate, PolicyEndDate);
 
+    [NotMapped]
     public int AgeOnAddition => AgeAt(MemberAddedOn);
 
+    private Employee()
+    {
+    }
 
     public Employee(
         string firstName,

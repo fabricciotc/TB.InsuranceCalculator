@@ -9,7 +9,7 @@ prorating method. It is a public API: there is no authentication or authorizatio
 
 - .NET 10 / ASP.NET Core controllers
 - Entity Framework Core with the InMemory provider
-- OpenAPI + [Scalar](https://scalar.com) as the API front end (no Swagger UI)
+- OpenAPI + Swagger UI as the API front end
 - C# records for all request and response contracts
 
 ## Architecture
@@ -22,7 +22,7 @@ src/
   TB.Insurance.Domain          Entities, value objects, pricing and prorating rules
   TB.Insurance.Application     Use cases and contracts
   TB.Insurance.Infrastructure  EF Core persistence and repository implementations
-  TB.Insurance.Api             HTTP endpoints, DI composition, Scalar
+  TB.Insurance.Api             HTTP endpoints, DI composition, Swagger UI
 ```
 
 Dependency direction: `Api -> Infrastructure -> Application -> Domain`.
@@ -33,7 +33,7 @@ Dependency direction: `Api -> Infrastructure -> Application -> Domain`.
 dotnet run --project src/TB.Insurance.Api
 ```
 
-The API reference is served at `http://localhost:5299/scalar/v1`.
+The API reference is served at `http://localhost:5299/swagger`.
 
 ## Endpoints
 

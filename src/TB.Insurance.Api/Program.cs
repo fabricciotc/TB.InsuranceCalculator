@@ -1,6 +1,5 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
-using Scalar.AspNetCore;
 using TB.Insurance.Application.Configuration;
 using TB.Insurance.Application.Employees;
 using TB.Insurance.Application.Premiums;
@@ -43,17 +42,16 @@ app.UseExceptionHandler();
 
 app.MapOpenApi();
 
-app.MapScalarApiReference(options =>
+app.UseSwaggerUI(options =>
 {
-    options
-        .WithTitle("TB Insurance Calculator API")
-        .WithTheme(ScalarTheme.Purple)
-        .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
+    options.SwaggerEndpoint("/openapi/v1.json", "TB Insurance Calculator API v1");
+    options.DocumentTitle = "TB Insurance Calculator API";
+    options.RoutePrefix = "swagger";
 });
 
 app.MapControllers();
 
-app.MapGet("/", () => Results.Redirect("/scalar/v1"))
+app.MapGet("/", () => Results.Redirect("/swagger"))
    .ExcludeFromDescription();
 
 app.Run();
