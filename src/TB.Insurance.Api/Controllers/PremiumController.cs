@@ -12,11 +12,11 @@ public sealed class PremiumController(GetPremiumHandler getPremium) : Controller
     public async Task<ActionResult<GetPremiumResponse>> GetPremium(
         [FromQuery] Guid employeeId,
         [FromQuery] PricingModel pricingModel,
-        [FromQuery] ProratingMethod prorataMethod,
+        [FromQuery] ProratingMethod prorateMethod,
         CancellationToken cancellationToken)
     {
         var response = await getPremium.HandleAsync(
-            new GetPremiumRequest(employeeId, pricingModel, prorataMethod),
+            new GetPremiumRequest(employeeId, pricingModel, prorateMethod),
             cancellationToken);
 
         return Ok(response);
