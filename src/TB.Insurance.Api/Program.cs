@@ -16,6 +16,8 @@ builder.Services.AddExceptionHandler<TB.Insurance.Api.Middleware.DomainException
 
 builder.Services.AddOpenApi(options =>
 {
+    options.AddSchemaTransformer<TB.Insurance.Api.OpenApi.EnumSchemaTransformer>();
+
     options.AddDocumentTransformer((document, _, _) =>
     {
         document.Info.Title = "TB Insurance Calculator API";
